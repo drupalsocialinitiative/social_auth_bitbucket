@@ -10,76 +10,73 @@ use Drupal\Core\Config\ConfigFactory;
  */
 class BitbucketAuthManager extends OAuth2Manager {
 
-    /**
-     * Constructor.
-     *
-     * @param \Drupal\Core\Config\ConfigFactory $configFactory
-     *   Used for accessing configuration object factory.
-     */
-    public function __construct(ConfigFactory $configFactory) {
-        parent::__construct($configFactory->get('social_auth_bitbucket.settings'));
+  /**
+   * Constructor.
+   *
+   * @param \Drupal\Core\Config\ConfigFactory $configFactory
+   *   Used for accessing configuration object factory.
+   */
+  public function __construct(ConfigFactory $configFactory) {
+    parent::__construct($configFactory->get('social_auth_bitbucket.settings'));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function authenticate() {
+    $this->setAccessToken($this->client->getAccessToken('authorization_code',
+      ['code' => $_GET['code']]));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getUserInfo() {
+    $this->user = $this->client->getResourceOwner($this->getAccessToken());
+    return $this->user;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAuthorizationUrl() {
+
+    $scopes = ['account', 'email'];
+
+    $extra_scopes = $this->getScopes();
+    if ($extra_scopes) {
+      if (strpos($extra_scopes, ',')) {
+        $scopes = array_merge($scopes, explode(',', $extra_scopes));
+      }
+      else {
+        $scopes[] = $extra_scopes;
+      }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function authenticate() {
-        $this->setAccessToken($this->client->getAccessToken('authorization_code',
-          ['code' => $_GET['code']]));
-    }
+    // Returns the URL where user will be redirected.
+    return $this->client->getAuthorizationUrl([
+      'scope' => $scopes,
+    ]);
+  }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getUserInfo() {
-        $this->user = $this->client->getResourceOwner($this->getAccessToken());
-        return $this->user;
-    }
+  /**
+   * {@inheritdoc}
+   */
+  public function requestEndPoint($path) {
+    $url = 'https://api.bitbucket.org' . $path;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAuthorizationUrl() {
+    $request = $this->client->getAuthenticatedRequest('GET', $url, $this->getAccessToken());
 
-        $scopes = ['account'];
-/*
-        $extra_scopes = $this->getScopes();
-        if ($extra_scopes) {
-            if (strpos($extra_scopes, ',')) {
-                $scopes = array_merge($scopes, explode(',', $extra_scopes));
-            }
-            else {
-                $scopes[] = $extra_scopes;
-            }
-        }*/
+    $response = $this->client->getResponse($request);
 
-        // Returns the URL where user will be redirected.
-        return $this->client->getAuthorizationUrl([
-          'scope' => $scopes,
-        ]);
-    }
+    return $response->getBody()->getContents();
+  }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function requestEndPoint($path) {
-        $url = 'https://api.bitbucket.org' . $path;
-
-        $request = $this->client->getAuthenticatedRequest('GET', $url, $this->getAccessToken());
-
-        $response = $this->client->getResponse($request);
-
-        return $response->getBody()->getContents();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getState() {
-        $state = $this->client->getState();
-
-        // Generate and return the URL where we should redirect the user.
-        return $state;
-    }
+  /**
+   * {@inheritdoc}
+   */
+  public function getState() {
+    return $this->client->getState();
+  }
 
 }

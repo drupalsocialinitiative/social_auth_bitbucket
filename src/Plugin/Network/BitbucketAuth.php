@@ -132,36 +132,30 @@ class BitbucketAuth extends NetworkBase implements BitbucketAuthInterface {
 
     $class_name = '\Stevenmaguire\OAuth2\Client\Provider\Bitbucket';
     if (!class_exists($class_name)) {
-      throw new SocialApiException(sprintf('The Bitbucket Library for the league oAuth not found. Class: %s.', $class_name));
+      throw new SocialApiException(sprintf('The Bitbucket library for PHP League OAuth2 not found. Class: %s.', $class_name));
     }
     /* @var \Drupal\social_auth_bitbucket\Settings\BitbucketAuthSettings $settings */
     $settings = $this->settings;
-    // Proxy configuration data for outward proxy.
-    $proxyUrl = $this->siteSettings->get("http_client_config")["proxy"]["http"];
+
     if ($this->validateConfig($settings)) {
       // All these settings are mandatory.
+      $league_settings = [
+        'clientId' => $settings->getKey(),
+        'clientSecret' => $settings->getSecret(),
+        'redirectUri' => $this->requestContext->getCompleteBaseUrl() . '/user/login/bitbucket/callback',
+        'scopeSeparator' => ' ',
+      ];
+
+      // Proxy configuration data for outward proxy.
+      $proxyUrl = $this->siteSettings->get('http_client_config')['proxy']['http'];
+
       if ($proxyUrl) {
-        $league_settings = [
-          'clientId' => $settings->getKey(),
-          'clientSecret' => $settings->getSecret(),
-          'redirectUri' => $this->requestContext->getCompleteBaseUrl() . '/user/login/bitbucket/callback',
-          'accessType' => 'offline',
-          'verify' => FALSE,
-          'proxy' => $proxyUrl,
-        ];
-      }
-      else {
-        $league_settings = [
-          'clientId' => $settings->getKey(),
-          'clientSecret' => $settings->getSecret(),
-          'redirectUri' => $this->requestContext->getCompleteBaseUrl() . '/user/login/bitbucket/callback',
-          'accessType' => 'offline',
-          'verify' => FALSE,
-        ];
+        $league_settings['proxy'] = $proxyUrl;
       }
 
       return new Bitbucket($league_settings);
     }
+
     return FALSE;
   }
 
@@ -181,7 +175,7 @@ class BitbucketAuth extends NetworkBase implements BitbucketAuthInterface {
     if (!$client_id || !$client_secret) {
       $this->loggerFactory
         ->get('social_auth_bitbucket')
-        ->error('Define Client ID and Client Secret on module settings.');
+        ->error('Define Key and Secret on module settings.');
       return FALSE;
     }
 

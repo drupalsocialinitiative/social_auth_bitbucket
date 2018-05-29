@@ -11,12 +11,16 @@
         "source": "http://cgit.drupalcode.org/social_auth_bitbucket"
     },
     "require": {
-        "stevenmaguire/oauth2-bitbucket": "^2.0"
+        "stevenmaguire/oauth2-bitbucket": "^3.0"
     },
     "authors": [
         {
             "name": "Levi Govaerts (legovaer)",
             "email": "lgovaerts@reference.be"
+        },
+        {
+            "name": "Getulio Valentin Sánchez (gvso)",
+            "email": "valentin2507@gmail.com"
         }
     ]
 }

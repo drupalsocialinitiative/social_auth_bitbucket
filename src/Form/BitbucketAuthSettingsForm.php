@@ -80,8 +80,10 @@ class BitbucketAuthSettingsForm extends SocialAuthSettingsForm {
       '#type' => 'details',
       '#title' => $this->t('Bitbucket Client settings'),
       '#open' => TRUE,
-      '#description' => $this->t('You need to first 
- configure your Bitbucket settings. Check <a href="@bitbucket-dev">Bitbucket Documentation</a> for more information.', ['@bitbucket-dev' => 'https://confluence.atlassian.com/bitbucket/oauth-on-bitbucket-cloud-238027431.html']),
+      '#description' => $this->t('You need to first configure your Bitbucket settings.
+                                 Check <a href="@bitbucket-dev">Bitbucket Documentation</a> for more information.<br>
+                                 Create a new app at <em>https://bitbucket.org/account/user/{your-user-name}/oauth-consumers/new</em>',
+                                 ['@bitbucket-dev' => 'https://confluence.atlassian.com/bitbucket/oauth-on-bitbucket-cloud-238027431.html']),
     ];
 
     $form['bitbucket_settings']['key'] = [
@@ -118,19 +120,19 @@ class BitbucketAuthSettingsForm extends SocialAuthSettingsForm {
       '#type' => 'textarea',
       '#title' => $this->t('Scopes for API call'),
       '#default_value' => $config->get('scopes'),
-      '#description' => $this->t('Define any additional scopes to be requested, separated by a comma (e.g.: public_repo,user:follow).<br>
-                                  The scopes \'user\' and \'user:email\' are added by default and always requested.<br>
-                                  You can see the full list of valid scopes and their description <a href="@scopes">here</a>.', ['@scopes' => 'https://developer.bitbucket.com/apps/building-oauth-apps/scopes-for-oauth-apps/']),
+      '#description' => $this->t('Define any additional scopes to be requested, separated by a comma (e.g.: team,repository).<br>
+                                  The scopes \'account\' and \'email\' are added by default and always requested.<br>
+                                  You can see the full list of valid fields and required scopes <a href="@fields">here</a>.', ['@fields' => 'https://developer.atlassian.com/bitbucket/api/2/reference/resource/']),
     ];
 
     $form['bitbucket_settings']['advanced']['endpoints'] = [
       '#type' => 'textarea',
       '#title' => $this->t('API calls to be made to collect data'),
       '#default_value' => $config->get('endpoints'),
-      '#description' => $this->t('Define the Endpoints to be requested when user authenticates with Bitbucket for the first time<br>
+      '#description' => $this->t('Define the endpoints to be requested when user authenticates with Bitbucket for the first time<br>
                                   Enter each endpoint in different lines in the format <em>endpoint</em>|<em>name_of_endpoint</em>.<br>
                                   <b>For instance:</b><br>
-                                  /user/repos|user_repos'),
+                                  /2.0/teams?role=member|user_teams'),
     ];
 
     return parent::buildForm($form, $form_state);
