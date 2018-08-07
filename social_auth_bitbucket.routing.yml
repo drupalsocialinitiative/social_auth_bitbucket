@@ -1,7 +1,7 @@
 social_auth_bitbucket.redirect_to_bitbucket:
   path: 'user/login/bitbucket'
   defaults:
-    _controller: '\Drupal\social_auth_bitbucket\Controller\BitbucketAuthController::redirectToBitbucket'
+    _controller: '\Drupal\social_auth_bitbucket\Controller\BitbucketAuthController::redirectToProvider'
   requirements:
     # Anonymous users can log in, but authenticated users can also associate a new provider.
     _access: 'TRUE'
