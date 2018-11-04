@@ -108,8 +108,7 @@ class BitbucketAuth extends NetworkBase implements BitbucketAuthInterface {
                               ConfigFactoryInterface $config_factory,
                               LoggerChannelFactoryInterface $logger_factory,
                               RequestContext $requestContext,
-                              Settings $settings
-  ) {
+                              Settings $settings) {
 
     parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $config_factory);
 
@@ -122,8 +121,9 @@ class BitbucketAuth extends NetworkBase implements BitbucketAuthInterface {
   /**
    * Sets the underlying SDK library.
    *
-   * @return \Stevenmaguire\OAuth2\Client\Provider\Bitbucket
+   * @return \Stevenmaguire\OAuth2\Client\Provider\Bitbucket|false
    *   The initialized 3rd party library instance.
+   *   False if library could not be initialized.
    *
    * @throws SocialApiException
    *   If the SDK library does not exist.

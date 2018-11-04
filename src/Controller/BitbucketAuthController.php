@@ -2,16 +2,13 @@
 
 namespace Drupal\social_auth_bitbucket\Controller;
 
-use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\social_api\Plugin\NetworkManager;
 use Drupal\social_auth\Controller\OAuth2ControllerBase;
 use Drupal\social_auth\SocialAuthDataHandler;
-use Drupal\social_auth\SocialAuthUserManager;
 use Drupal\social_auth\User\UserAuthenticator;
 use Drupal\social_auth_bitbucket\BitbucketAuthManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Routing\TrustedRedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**

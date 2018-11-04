@@ -13,8 +13,8 @@ CONTENTS OF THIS FILE
 INTRODUCTION
 ------------
 
-Social Auth Bitbucket Module is a Bitbucket Authentication integration for Drupal. It
-is based on the Social Auth and Social API projects
+Social Auth Bitbucket is a Bitbucket authentication integration for Drupal. It
+is based on the Social Auth and Social API projects.
 
 It adds to the site:
  * A new url: /user/login/bitbucket.
@@ -35,7 +35,7 @@ INSTALLATION
 ------------
 
  * Run composer to install the dependencies.
-   composer require "drupal/social_auth_bitbucket:^1.0"
+   composer require "drupal/social_auth_bitbucket:^2.0"
 
  * Install the dependencies: Social API and Social Auth.
 
@@ -64,8 +64,8 @@ to /user/login/bitbucket, so theming and customizing the button or link
 is very flexible.
 
 When the user opens the /user/login/bitbucket link, it automatically takes the
-user to Bitbucket Accounts for authentication. Bitbucket then returns the user to
-Drupal site. If we have an existing Drupal user with the same email address
+user to Bitbucket Accounts for authentication. Bitbucket then returns the user
+to Drupal site. If we have an existing Drupal user with the same email address
 provided by Bitbucket, that user is logged in. Otherwise a new Drupal user is
 created.
 
@@ -92,3 +92,4 @@ MAINTAINERS
 
 Current maintainers:
  * Levi Govaerts (legovaer) - https://www.drupal.org/u/legovaer
+ * Getulio Sanchez (gvso) - https://www.drupal.org/u/gvso
