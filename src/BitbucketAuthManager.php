@@ -6,7 +6,7 @@ use Drupal\social_auth\AuthManager\OAuth2Manager;
 use Drupal\Core\Config\ConfigFactory;
 
 /**
- * Contains all the logic for Bitbucket login integration.
+ * Contains all the logic for Bitbucket OAuth2 authentication.
  */
 class BitbucketAuthManager extends OAuth2Manager {
 
@@ -67,9 +67,7 @@ class BitbucketAuthManager extends OAuth2Manager {
 
     $request = $this->client->getAuthenticatedRequest('GET', $url, $this->getAccessToken());
 
-    $response = $this->client->getResponse($request);
-
-    return $response->getBody()->getContents();
+    return $this->client->getParsedResponse($request);
   }
 
   /**
