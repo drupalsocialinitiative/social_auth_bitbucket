@@ -79,7 +79,7 @@ class BitbucketAuthController extends OAuth2ControllerBase {
       $data = $this->userAuthenticator->checkProviderIsAssociated($profile->getId()) ? NULL : $this->providerManager->getExtraDetails();
 
       // Gets email address.
-      $emails = $this->providerManager->requestEndPoint('/2.0/user/emails');
+      $emails = $this->providerManager->requestEndPoint('GET', '/2.0/user/emails');
       $email = '';
       foreach ($emails['values'] as $email_info) {
         if ($email_info['is_primary']) {
