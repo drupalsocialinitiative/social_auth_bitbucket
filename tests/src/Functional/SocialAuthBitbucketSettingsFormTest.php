@@ -2,16 +2,17 @@
 
 namespace Drupal\Tests\social_auth_bitbucket\Functional;
 
-use Drupal\social_api\SocialApiSettingsFormBaseTest;
+use Drupal\Tests\social_auth\Functional\SocialAuthTestBase;
 
 /**
- * Test Social Auth Bitbucket settings form.
+ * Test Social Auth Bibucket settings form.
  *
  * @group social_auth
  *
  * @ingroup social_auth_bitbucket
  */
-class SocialAuthBitbucketSettingsFormTest extends SocialApiSettingsFormBaseTest {
+class SocialAuthBitbucketSettingsFormTest extends SocialAuthTestBase {
+
   /**
    * Modules to enable.
    *
@@ -24,23 +25,32 @@ class SocialAuthBitbucketSettingsFormTest extends SocialApiSettingsFormBaseTest 
    */
   protected function setUp() {
     $this->module = 'social_auth_bitbucket';
-    $this->socialNetwork = 'bitbucket';
-    $this->moduleType = 'social-auth';
+    $this->provider = 'bitbucket';
 
     parent::setUp();
   }
 
   /**
-   * {@inheritdoc}
+   * Test if implementer is shown in the integration list.
    */
   public function testIsAvailableInIntegrationList() {
     $this->fields = ['key', 'secret'];
 
-    parent::testIsAvailableInIntegrationList();
+    $this->checkIsAvailableInIntegrationList();
   }
 
   /**
-   * {@inheritdoc}
+   * Test if permissions are set correctly for settings page.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   * @throws \Behat\Mink\Exception\ExpectationException
+   */
+  public function testPermissionForSettingsPage() {
+    $this->checkPermissionForSettingsPage();
+  }
+
+  /**
+   * Test settings form submission.
    */
   public function testSettingsFormSubmission() {
     $this->edit = [
@@ -48,7 +58,7 @@ class SocialAuthBitbucketSettingsFormTest extends SocialApiSettingsFormBaseTest 
       'secret' => $this->randomString(10),
     ];
 
-    parent::testSettingsFormSubmission();
+    $this->checkSettingsFormSubmission();
   }
 
 }
