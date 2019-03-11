@@ -2,16 +2,11 @@
 
 namespace Drupal\social_auth_bitbucket\Plugin\Network;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
-use Drupal\social_api\Plugin\NetworkBase;
 use Drupal\social_api\SocialApiException;
+use Drupal\social_auth\Plugin\Network\NetworkBase;
 use Drupal\social_auth_bitbucket\Settings\BitbucketAuthSettings;
 use Stevenmaguire\OAuth2\Client\Provider\Bitbucket;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines a Network Plugin for Social Auth Bitbucket.
@@ -23,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   social_network = "Bitbucket",
  *   type = "social_auth",
  *   handlers = {
- *     "settings": {
+ *    "settings": {
  *       "class": "\Drupal\social_auth_bitbucket\Settings\BitbucketAuthSettings",
  *       "config_id": "social_auth_bitbucket.settings"
  *     }
@@ -31,67 +26,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class BitbucketAuth extends NetworkBase implements BitbucketAuthInterface {
-
-  /**
-   * The logger factory.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelFactory
-   */
-  protected $loggerFactory;
-
-  /**
-   * The site settings.
-   *
-   * @var \Drupal\Core\Site\Settings
-   */
-  protected $siteSettings;
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('entity_type.manager'),
-      $container->get('config.factory'),
-      $container->get('logger.factory'),
-      $container->get('settings')
-    );
-  }
-
-  /**
-   * BitbucketAuth constructor.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param array $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The configuration factory object.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
-   *   The logger factory.
-   * @param \Drupal\Core\Site\Settings $settings
-   *   The site settings.
-   */
-  public function __construct(array $configuration,
-                              $plugin_id,
-                              array $plugin_definition,
-                              EntityTypeManagerInterface $entity_type_manager,
-                              ConfigFactoryInterface $config_factory,
-                              LoggerChannelFactoryInterface $logger_factory,
-                              Settings $settings) {
-
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $config_factory);
-
-    $this->loggerFactory = $logger_factory;
-    $this->siteSettings = $settings;
-  }
 
   /**
    * Sets the underlying SDK library.
@@ -119,7 +53,6 @@ class BitbucketAuth extends NetworkBase implements BitbucketAuthInterface {
         'clientId' => $settings->getKey(),
         'clientSecret' => $settings->getSecret(),
         'redirectUri' => Url::fromRoute('social_auth_bitbucket.callback')->setAbsolute()->toString(),
-        'scopeSeparator' => ' ',
       ];
 
       // Proxy configuration data for outward proxy.
@@ -152,6 +85,7 @@ class BitbucketAuth extends NetworkBase implements BitbucketAuthInterface {
       $this->loggerFactory
         ->get('social_auth_bitbucket')
         ->error('Define Key and Secret on module settings.');
+
       return FALSE;
     }
 
