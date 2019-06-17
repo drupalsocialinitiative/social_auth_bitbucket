@@ -14,15 +14,15 @@ use Stevenmaguire\OAuth2\Client\Provider\Bitbucket;
  * @package Drupal\social_auth_bitbucket\Plugin\Network
  *
  * @Network(
- *   id = "social_auth_bitbucket",
- *   social_network = "Bitbucket",
- *   type = "social_auth",
- *   handlers = {
- *    "settings": {
- *       "class": "\Drupal\social_auth_bitbucket\Settings\BitbucketAuthSettings",
- *       "config_id": "social_auth_bitbucket.settings"
- *     }
- *   }
+ *  id = "social_auth_bitbucket",
+ *  social_network = "Bitbucket",
+ *  type = "social_auth",
+ *  handlers = {
+ *   "settings": {
+ *      "class": "\Drupal\social_auth_bitbucket\Settings\BitbucketAuthSettings",
+ *      "config_id": "social_auth_bitbucket.settings"
+ *    }
+ *  }
  * )
  */
 class BitbucketAuth extends NetworkBase implements BitbucketAuthInterface {
@@ -34,7 +34,7 @@ class BitbucketAuth extends NetworkBase implements BitbucketAuthInterface {
    *   The initialized 3rd party library instance.
    *   False if library could not be initialized.
    *
-   * @throws SocialApiException
+   * @throws \Drupal\social_api\SocialApiException
    *   If the SDK library does not exist.
    */
   protected function initSdk() {
